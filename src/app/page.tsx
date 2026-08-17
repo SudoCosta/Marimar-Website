@@ -56,7 +56,7 @@ export default function HomePage() {
       <PricingSection />
 
       <section className="care-section">
-        <div className="care-visual" aria-hidden="true"><div className="care-circle"><span>M</span></div><p>Matéria · Método · Manutenção</p></div>
+        <div className="care-visual" aria-hidden="true"><div className="care-circle"><Image className="care-logo" src={`${basePath}/marimar-emblem.png`} alt="" width={1254} height={1254} /></div><p>Matéria · Método · Manutenção</p></div>
         <div className="care-copy">
           <p className="eyebrow eyebrow-light"><span />Mais do que limpar</p>
           <h2>Cuidar do que já faz parte da sua casa.</h2>

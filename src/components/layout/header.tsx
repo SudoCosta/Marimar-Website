@@ -16,7 +16,7 @@ export function Brand() {
   return (
     <Link className="brand" href="/" aria-label="Marimar — página inicial">
       <span className="brand-mark" aria-hidden="true">
-        <Image src={`${basePath}/marimar-logo.png`} alt="" width={1254} height={1254} priority />
+        <Image src={`${basePath}/marimar-emblem.png`} alt="" width={1254} height={1254} priority />
       </span>
       <span className="brand-wordmark"><strong>Marimar</strong><small>Clean Living</small></span>
     </Link>
