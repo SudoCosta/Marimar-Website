@@ -38,6 +38,7 @@ export default async function ServiceDetailPage({ params }: PageProps<"/servicos
           <p className="eyebrow"><span />{service.eyebrow}</p>
           <h1>{service.title}<br /><em>em Leiria.</em></h1>
           <p>{service.description}</p>
+          {service.priceLabel && <div className="service-detail-price"><span>Preço de referência</span><strong>{service.priceLabel}</strong></div>}
           <Link className="button" href={`/orcamento?servico=${service.id}`}>Pedir orçamento <ArrowUpRight aria-hidden="true" /></Link>
         </div>
         <div className="service-detail-art"><span>0{services.indexOf(service) + 1}</span><Icon aria-hidden="true" /><p>{service.processNote}</p></div>

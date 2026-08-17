@@ -46,14 +46,14 @@ function QuoteUnavailable() {
   return (
     <section className="quote-success quote-unavailable" aria-labelledby="quote-unavailable-title">
       <CircleAlert aria-hidden="true" />
-      <p className="eyebrow"><span />Pedidos online</p>
-      <h2 id="quote-unavailable-title">O formulário ainda não está ativo neste alojamento.</h2>
-      <p>Esta versão do site não recolhe nem envia dados pessoais. O formulário será ativado quando existir um endpoint externo seguro para receber os pedidos.</p>
+      <p className="eyebrow"><span />Atendimento personalizado</p>
+      <h2 id="quote-unavailable-title">Peça já o seu orçamento por contacto direto.</h2>
+      <p>Indique os artigos, quantidades, localidade e, se possível, envie fotografias. A equipa confirma o valor e a disponibilidade consigo.</p>
       {hasContacts ? <div className="quote-unavailable-actions">
         {contacts.phone && <a className="button" href={telephoneHref(contacts.phone)}><Phone aria-hidden="true" />Telefonar</a>}
         {contacts.email && <a className="button" href={`mailto:${contacts.email}`}><Mail aria-hidden="true" />Enviar email</a>}
         {contacts.whatsapp && <a className="button" href={whatsappHref(contacts.whatsapp)}><MessageCircle aria-hidden="true" />WhatsApp</a>}
-      </div> : <p className="availability-note">Os contactos diretos também serão publicados assim que forem confirmados pela Marimar.</p>}
+      </div> : <p className="availability-note">Os contactos diretos estão temporariamente indisponíveis.</p>}
       <Link className="button button-secondary" href="/">Voltar à página inicial <ArrowRight aria-hidden="true" /></Link>
     </section>
   );
@@ -165,9 +165,9 @@ function InteractiveQuoteWizard({ initialService, submissionEndpoint }: { initia
         <div className="future-note"><Plus aria-hidden="true" /><p><strong>Fotografias numa fase futura.</strong> O pedido já está preparado para receber fotografias quando esta funcionalidade for ativada, mas não é possível carregá-las neste MVP.</p></div>
       </fieldset>}
 
-      {step === 2 && <fieldset className="form-step" id="localizacao"><legend><span>Passo 3 de 4</span>Localização e preferência</legend><p className="step-intro">A cobertura principal é Leiria e cerca de 30 km. A equipa confirma a elegibilidade; não recusamos automaticamente pedidos fora desta referência.</p>
+      {step === 2 && <fieldset className="form-step" id="localizacao"><legend><span>Passo 3 de 4</span>Localização e preferência</legend><p className="step-intro">A cobertura habitual inclui Leiria, Fátima, Ourém e arredores. A equipa confirma sempre a deslocação para a sua morada.</p>
         <div className="field-grid"><label>Código postal<input type="text" inputMode="numeric" autoComplete="postal-code" placeholder="0000-000" maxLength={8} aria-invalid={!!errors.postalCode} aria-describedby={errors.postalCode ? "postal-error" : undefined} {...form.register("postalCode")} /><ErrorMessage id="postal-error" message={errors.postalCode?.message} /></label><label>Localidade<input type="text" autoComplete="address-level2" maxLength={100} aria-invalid={!!errors.locality} aria-describedby={errors.locality ? "locality-error" : undefined} {...form.register("locality")} /><ErrorMessage id="locality-error" message={errors.locality?.message} /></label><label>Data preferida <span>(opcional)</span><input type="date" aria-invalid={!!errors.preferredDate} aria-describedby={errors.preferredDate ? "date-error" : undefined} {...form.register("preferredDate")} /><small>É uma preferência, não disponibilidade confirmada.</small><ErrorMessage id="date-error" message={errors.preferredDate?.message} /></label><label>Período preferido<select {...form.register("preferredPeriod")}><option value="indiferente">Indiferente</option><option value="manha">Manhã</option><option value="tarde">Tarde</option></select></label><label className="field-span">Informação de acesso <span>(opcional)</span><textarea rows={4} maxLength={500} placeholder="Ex.: terceiro andar sem elevador, estacionamento condicionado, acesso por escadas." {...form.register("accessNotes")} /></label></div>
-        <div className="coverage-info"><strong>Fora dos 30 km aproximados?</strong><p>Envie o pedido na mesma. A deslocação é analisada em função da morada, do artigo e da modalidade.</p></div>
+        <div className="coverage-info"><strong>Fora da zona habitual?</strong><p>Contacte-nos na mesma. A deslocação é analisada em função da morada, do artigo e da modalidade.</p></div>
       </fieldset>}
 
       {step === 3 && <fieldset className="form-step"><legend><span>Passo 4 de 4</span>Contacto e revisão</legend><p className="step-intro">Precisamos de pelo menos um contacto válido para responder ao pedido. O email e o telefone não são guardados permanentemente no seu browser.</p>

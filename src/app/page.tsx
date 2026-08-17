@@ -1,13 +1,17 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowDown, ArrowUpRight, Check, ClipboardList, Home, MapPin, MessageSquareText, ShieldCheck, Sparkles, WalletCards } from "lucide-react";
 import { CtaBlock } from "@/components/ui/cta-block";
 import { Faq } from "@/components/ui/faq";
+import { PricingSection } from "@/components/ui/pricing-section";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ServiceCard } from "@/components/ui/service-card";
 import { faqItems } from "@/data/faq";
 import { services } from "@/data/services";
 
-const process = [
+const basePath = process.env.PAGES_BASE_PATH?.replace(/\/$/, "") || "";
+
+const serviceProcess = [
   { icon: ClipboardList, title: "Indique o que precisa de limpar", text: "Selecione um ou vários artigos e as respetivas quantidades." },
   { icon: MessageSquareText, title: "Partilhe os detalhes", text: "Diga-nos o que sabe sobre o tecido, estado, localização e preferências." },
   { icon: ShieldCheck, title: "Receba a confirmação", text: "A equipa analisa o pedido e confirma orçamento, deslocação e horário." },
@@ -19,16 +23,17 @@ export default function HomePage() {
     <main id="conteudo">
       <section className="hero">
         <div className="hero-copy">
-          <p className="eyebrow"><span />Tratamento especializado de estofos em Leiria</p>
-          <h1>Limpeza profissional.<br /><em>Cuidado especializado.</em><br />Conveniência.</h1>
-          <p className="hero-intro">Higienização profunda de sofás, colchões, cadeiras, tapetes, carpetes e estofos automóveis — em sua casa, sempre que as condições o permitam.</p>
+          <p className="eyebrow"><span />Higienização premium de têxteis em Leiria</p>
+          <h1>Luxo é viver<br />num lar <em>limpo.</em></h1>
+          <p className="hero-intro">Cuidamos de sofás, colchões, tapetes e carpetes com limpeza profunda, produtos adequados ao tecido e atendimento próximo em sua casa.</p>
           <div className="hero-actions">
             <Link className="button" href="/orcamento">Pedir orçamento <ArrowUpRight aria-hidden="true" /></Link>
             <Link className="text-link" href="#servicos">Conhecer os serviços <ArrowDown aria-hidden="true" /></Link>
           </div>
-          <p className="hero-note">Leiria e localidades num raio aproximado de 30 km · Recolha e entrega quando necessário</p>
+          <p className="hero-note">Leiria · Fátima · Ourém e arredores · Recolha e entrega quando necessário</p>
         </div>
-        <div className="hero-art" role="img" aria-label="Composição abstrata inspirada em tecidos e estofos">
+        <div className="hero-art" role="img" aria-label="Detalhe de tecidos em tons marfim e verde-petróleo">
+          <Image className="hero-art-image" src={`${basePath}/og.png`} alt="" fill sizes="(max-width: 850px) 100vw, 46vw" priority />
           <div className="fabric fabric-back" />
           <div className="fabric fabric-front"><span className="stitch stitch-one" /><span className="stitch stitch-two" /></div>
           <div className="fiber-detail"><span /><span /><span /></div>
@@ -37,7 +42,7 @@ export default function HomePage() {
       </section>
 
       <section className="trust-bar" aria-label="Vantagens do serviço">
-        <div><MapPin aria-hidden="true" /><span><strong>Leiria</strong> e cerca de 30 km</span></div>
+        <div><MapPin aria-hidden="true" /><span><strong>Leiria · Fátima · Ourém</strong> e arredores</span></div>
         <div><Home aria-hidden="true" /><span><strong>Em sua casa</strong> quando possível</span></div>
         <div><Sparkles aria-hidden="true" /><span><strong>Orçamento</strong> personalizado</span></div>
       </section>
@@ -47,6 +52,8 @@ export default function HomePage() {
         <div className="services-grid">{services.map((service, index) => <ServiceCard key={service.id} service={service} index={index} />)}</div>
         <div className="section-link-row"><Link className="text-link" href="/servicos">Ver todos os serviços <ArrowUpRight aria-hidden="true" /></Link></div>
       </section>
+
+      <PricingSection />
 
       <section className="care-section">
         <div className="care-visual" aria-hidden="true"><div className="care-circle"><span>M</span></div><p>Matéria · Método · Manutenção</p></div>
@@ -66,7 +73,7 @@ export default function HomePage() {
       <section className="section process-section">
         <SectionHeading eyebrow="Um processo simples" title={<>Do primeiro detalhe<br /><em>à realização do serviço.</em></>} description="Um pedido claro permite preparar uma resposta mais útil. O agendamento só fica confirmado depois da análise da equipa." />
         <ol className="process-grid">
-          {process.map((item, index) => { const Icon = item.icon; return <li key={item.title}><span className="process-index">0{index + 1}</span><Icon aria-hidden="true" /><h3>{item.title}</h3><p>{item.text}</p></li>; })}
+          {serviceProcess.map((item, index) => { const Icon = item.icon; return <li key={item.title}><span className="process-index">0{index + 1}</span><Icon aria-hidden="true" /><h3>{item.title}</h3><p>{item.text}</p></li>; })}
         </ol>
       </section>
 
@@ -87,8 +94,8 @@ export default function HomePage() {
         <div className="area-rings" aria-hidden="true"><span className="ring ring-one" /><span className="ring ring-two" /><span className="ring-center">Leiria</span><i>N</i><i>S</i></div>
         <div className="area-copy">
           <p className="eyebrow eyebrow-light"><span />Área de atuação</p>
-          <h2>Leiria e zona envolvente.</h2>
-          <p>Trabalhamos principalmente num raio aproximado de 30 km. A cobertura final depende da morada, do artigo e da modalidade do serviço — nunca rejeitamos automaticamente um pedido apenas pela localização.</p>
+          <h2>Leiria, Fátima e Ourém.</h2>
+          <p>Trabalhamos nestas localidades e arredores, tendo cerca de 30 km como referência. A cobertura final depende da morada, do artigo e da modalidade do serviço.</p>
           <Link className="button button-light" href="/area-de-atuacao">Consultar a área <ArrowUpRight aria-hidden="true" /></Link>
         </div>
       </section>

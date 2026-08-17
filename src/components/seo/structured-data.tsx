@@ -7,8 +7,10 @@ export function StructuredData() {
     "@type": "LocalBusiness",
     name: siteConfig.name,
     url: siteConfig.publicUrl,
-    description: "Limpeza e higienização especializada de estofos e superfícies têxteis em Leiria e zona envolvente.",
-    areaServed: { "@type": "City", name: "Leiria" },
+    description: "Higienização premium de sofás, colchões, tapetes e carpetes, e engomadoria ao domicílio.",
+    areaServed: ["Leiria", "Fátima", "Ourém"].map((name) => ({ "@type": "City", name })),
+    sameAs: siteConfig.socialProfiles,
+    priceRange: "€€",
     ...(siteConfig.contacts.phone ? { telephone: siteConfig.contacts.phone } : {}),
     ...(siteConfig.contacts.email ? { email: siteConfig.contacts.email } : {}),
     hasOfferCatalog: {

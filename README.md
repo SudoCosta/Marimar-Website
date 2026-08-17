@@ -30,16 +30,17 @@ pnpm build
 | Variável | Obrigatória | Utilização |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Produção | URL canónica, sitemap, robots e dados estruturados. |
-| `NEXT_PUBLIC_PHONE` | Não | Telefone público. O botão é ocultado se estiver vazio. |
-| `NEXT_PUBLIC_EMAIL` | Não | Email público. O botão é ocultado se estiver vazio. |
-| `NEXT_PUBLIC_WHATSAPP` | Não | Número internacional para `wa.me`. O botão é ocultado se estiver vazio. |
+| `NEXT_PUBLIC_PHONE` | Não | Substitui o telefone público definido nos materiais da marca. |
+| `NEXT_PUBLIC_EMAIL` | Não | Substitui o email público definido nos materiais da marca. |
+| `NEXT_PUBLIC_WHATSAPP` | Não | Substitui o número internacional utilizado pelo WhatsApp. |
+| `NEXT_PUBLIC_INSTAGRAM` | Não | Substitui o perfil público `@marimar.limpeza`. |
 | `NEXT_PUBLIC_SCHEDULE` | Não | Horário público, apenas depois de confirmado. |
 | `NEXT_PUBLIC_LEADS_ENDPOINT` | Não | Endpoint HTTPS externo para ativar o formulário no GitHub Pages. Deve aceitar POST JSON e devolver `{ "id": "..." }`. |
 | `RESEND_API_KEY` | Backend futuro | Chave server-side do Resend. Nunca pode ser configurada como variável `NEXT_PUBLIC_*` nem exposta no GitHub Pages. |
 | `LEADS_TO_EMAIL` | Backend futuro | Caixa que recebe os pedidos validados. |
 | `FROM_EMAIL` | Backend futuro | Remetente verificado no Resend. |
 
-Sem `NEXT_PUBLIC_LEADS_ENDPOINT`, o site não apresenta campos pessoais nem simula o envio de pedidos. Mostra um estado informativo e, quando existirem, os contactos diretos confirmados. O GitHub Pages nunca deve receber chaves do Resend: qualquer integração de email tem de viver num backend separado.
+Sem `NEXT_PUBLIC_LEADS_ENDPOINT`, o site não apresenta campos pessoais nem simula o envio de pedidos. Encaminha o visitante para telefone, WhatsApp ou email. O GitHub Pages nunca deve receber chaves do Resend: qualquer integração de email tem de viver num backend separado.
 
 ## Comportamento do pedido de orçamento
 
@@ -70,11 +71,11 @@ Não duplicar contactos, raio, região ou dados legais diretamente nos component
 
 Antes do lançamento, o responsável da Marimar deve fornecer ou confirmar:
 
-- telefone, email, WhatsApp e horário público;
+- horário público;
 - nome legal, NIF, morada fiscal e contacto de privacidade;
 - domínio público final;
 - credenciais Resend, domínio de envio e email de destino;
-- condições comerciais e meios de pagamento efetivamente aceites;
+- confirmação periódica da tabela de preços, condições comerciais e meios de pagamento aceites;
 - política de retenção e eliminação dos pedidos;
 - claims técnicos ou comerciais que possam ser comprovados.
 
@@ -103,7 +104,7 @@ O workflow `.github/workflows/nextjs.yml` executa automaticamente em cada push p
 
 Em **Settings → Pages**, a origem deve estar definida como **GitHub Actions**. A URL esperada é `https://SudoCosta.github.io/Marimar-Website/`.
 
-Os contactos públicos podem ser configurados em **Settings → Secrets and variables → Actions → Variables** com os nomes `NEXT_PUBLIC_PHONE`, `NEXT_PUBLIC_EMAIL`, `NEXT_PUBLIC_WHATSAPP` e `NEXT_PUBLIC_SCHEDULE`. `NEXT_PUBLIC_LEADS_ENDPOINT` só deve ser preenchido quando existir um backend HTTPS seguro e testado. Nunca adicionar `RESEND_API_KEY` às variáveis públicas.
+Os contactos publicados têm como base os materiais da marca e podem ser substituídos em **Settings → Secrets and variables → Actions → Variables** com `NEXT_PUBLIC_PHONE`, `NEXT_PUBLIC_EMAIL`, `NEXT_PUBLIC_WHATSAPP`, `NEXT_PUBLIC_INSTAGRAM` e `NEXT_PUBLIC_SCHEDULE`. `NEXT_PUBLIC_LEADS_ENDPOINT` só deve ser preenchido quando existir um backend HTTPS seguro e testado. Nunca adicionar `RESEND_API_KEY` às variáveis públicas.
 
 ## Checklist de lançamento
 

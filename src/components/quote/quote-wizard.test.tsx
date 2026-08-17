@@ -21,7 +21,8 @@ describe("QuoteWizard", () => {
 
   it("não recolhe dados quando o endpoint de pedidos não está configurado", () => {
     render(<QuoteWizard submissionEndpoint={null} />);
-    expect(screen.getByRole("heading", { name: /formulário ainda não está ativo/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /orçamento por contacto direto/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /WhatsApp/i })).toHaveAttribute("href", "https://wa.me/351911898896");
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   });
 });

@@ -13,7 +13,7 @@ export const leadItemSchema = z.object({
 });
 
 export const leadRequestSchema = z.object({
-  services: z.array(z.enum(serviceIds)).max(6),
+  services: z.array(z.enum(serviceIds)).max(serviceIds.length),
   items: z.array(leadItemSchema).min(1, "Selecione pelo menos um artigo.").max(12),
   serviceMode: z.enum(["domicilio", "recolha-entrega", "aconselhamento"]),
   postalCode: z.string().trim().regex(/^\d{4}-\d{3}$/, "Utilize o formato 0000-000."),

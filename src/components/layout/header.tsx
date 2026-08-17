@@ -1,18 +1,24 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, Menu } from "lucide-react";
 
 const navigation = [
   { href: "/servicos", label: "Serviços" },
+  { href: "/#precos", label: "Preços" },
   { href: "/como-funciona", label: "Como funciona" },
   { href: "/area-de-atuacao", label: "Área de atuação" },
   { href: "/contactos", label: "Contactos" },
 ];
 
+const basePath = process.env.PAGES_BASE_PATH?.replace(/\/$/, "") || "";
+
 export function Brand() {
   return (
     <Link className="brand" href="/" aria-label="Marimar — página inicial">
-      <span className="brand-mark" aria-hidden="true">M</span>
-      <span>Marimar</span>
+      <span className="brand-mark" aria-hidden="true">
+        <Image src={`${basePath}/marimar-logo.png`} alt="" width={1254} height={1254} priority />
+      </span>
+      <span className="brand-wordmark"><strong>Marimar</strong><small>Clean Living</small></span>
     </Link>
   );
 }

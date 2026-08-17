@@ -1,18 +1,18 @@
 import Link from "next/link";
-import { Mail, MessageCircle, Phone } from "lucide-react";
+import { Camera, Mail, MessageCircle, Phone } from "lucide-react";
 import { siteConfig, telephoneHref, whatsappHref } from "@/config/site";
 import { Brand } from "@/components/layout/header";
 
 export function Footer() {
   const { contacts } = siteConfig;
-  const hasContacts = contacts.phone || contacts.email || contacts.whatsapp;
+  const hasContacts = contacts.phone || contacts.email || contacts.whatsapp || contacts.instagram;
 
   return (
     <footer className="site-footer">
       <div className="footer-main">
         <div className="footer-intro">
           <Brand />
-          <p>Tratamento especializado de estofos e superfícies têxteis em Leiria e zona envolvente.</p>
+          <p>Higienização premium de têxteis e engomadoria ao domicílio em Leiria, Fátima, Ourém e arredores.</p>
         </div>
         <div>
           <p className="footer-label">Navegação</p>
@@ -38,6 +38,7 @@ export function Footer() {
               {contacts.phone && <a href={telephoneHref(contacts.phone)}><Phone aria-hidden="true" />{contacts.phone}</a>}
               {contacts.email && <a href={`mailto:${contacts.email}`}><Mail aria-hidden="true" />{contacts.email}</a>}
               {contacts.whatsapp && <a href={whatsappHref(contacts.whatsapp)}><MessageCircle aria-hidden="true" />WhatsApp</a>}
+              {contacts.instagram && <a href={contacts.instagram} target="_blank" rel="noreferrer"><Camera aria-hidden="true" />@marimar.limpeza</a>}
             </div>
           </div>
         ) : (
@@ -50,7 +51,7 @@ export function Footer() {
       </div>
       <div className="footer-bottom">
         <span>© {new Date().getFullYear()} Marimar</span>
-        <span>Leiria · Portugal</span>
+        <span>Leiria · Fátima · Ourém</span>
         <span>Pagamento após o serviço</span>
       </div>
     </footer>

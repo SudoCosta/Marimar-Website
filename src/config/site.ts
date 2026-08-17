@@ -3,18 +3,19 @@ const leadsEndpoint = process.env.NEXT_PUBLIC_LEADS_ENDPOINT?.trim() || null;
 
 export const siteConfig = {
   name: "Marimar",
-  tagline: "Limpeza profissional. Cuidado especializado. Conveniência.",
+  tagline: "Luxo é viver num lar limpo.",
   region: "Leiria",
   approximateRadiusKm: 30,
   publicUrl,
   leadsEndpoint,
   contacts: {
-    phone: process.env.NEXT_PUBLIC_PHONE?.trim() || null,
-    email: process.env.NEXT_PUBLIC_EMAIL?.trim() || null,
-    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP?.trim() || null,
+    phone: process.env.NEXT_PUBLIC_PHONE?.trim() || "911 898 896",
+    email: process.env.NEXT_PUBLIC_EMAIL?.trim() || "geral.marimarlimpeza@gmail.com",
+    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP?.trim() || "351911898896",
+    instagram: process.env.NEXT_PUBLIC_INSTAGRAM?.trim() || "https://www.instagram.com/marimar.limpeza/",
     schedule: process.env.NEXT_PUBLIC_SCHEDULE?.trim() || null,
   },
-  socialProfiles: [] as string[],
+  socialProfiles: [process.env.NEXT_PUBLIC_INSTAGRAM?.trim() || "https://www.instagram.com/marimar.limpeza/"],
   legal: {
     legalName: null,
     taxId: null,

@@ -50,6 +50,7 @@ jobs:
           NEXT_PUBLIC_PHONE: ${{ vars.NEXT_PUBLIC_PHONE }}
           NEXT_PUBLIC_EMAIL: ${{ vars.NEXT_PUBLIC_EMAIL }}
           NEXT_PUBLIC_WHATSAPP: ${{ vars.NEXT_PUBLIC_WHATSAPP }}
+          NEXT_PUBLIC_INSTAGRAM: ${{ vars.NEXT_PUBLIC_INSTAGRAM }}
           NEXT_PUBLIC_SCHEDULE: ${{ vars.NEXT_PUBLIC_SCHEDULE }}
 
       - name: Upload Pages artifact

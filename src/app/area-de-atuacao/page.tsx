@@ -6,7 +6,7 @@ import { CtaBlock } from "@/components/ui/cta-block";
 
 export const metadata: Metadata = {
   title: "Área de Atuação em Leiria e Zona Envolvente",
-  description: "Serviço Marimar em Leiria e localidades num raio aproximado de 30 km, sujeito a confirmação da morada, artigo e modalidade.",
+  description: "Serviço Marimar em Leiria, Fátima, Ourém e arredores, sujeito a confirmação da morada, artigo e modalidade.",
   alternates: { canonical: "/area-de-atuacao" },
 };
 
@@ -14,7 +14,7 @@ export default function ServiceAreaPage() {
   return (
     <main id="conteudo">
       <section className="page-hero page-hero-split area-page-hero">
-        <div><Breadcrumbs items={[{ label: "Início", href: "/" }, { label: "Área de atuação" }]} /><p className="eyebrow"><span />A partir de Leiria</p><h1>Perto de si,<br /><em>quando importa.</em></h1><p className="page-intro">A Marimar trabalha principalmente em Leiria e num raio aproximado de 30 km. Esta referência ajuda a planear a deslocação, mas não funciona como uma fronteira automática.</p><Link className="button" href="/orcamento#localizacao">Enviar código postal <ArrowUpRight aria-hidden="true" /></Link></div>
+        <div><Breadcrumbs items={[{ label: "Início", href: "/" }, { label: "Área de atuação" }]} /><p className="eyebrow"><span />Leiria · Fátima · Ourém</p><h1>Perto de si,<br /><em>quando importa.</em></h1><p className="page-intro">A Marimar trabalha habitualmente em Leiria, Fátima, Ourém e arredores. Cerca de 30 km funciona como referência para planear a deslocação, não como uma fronteira automática.</p><Link className="button" href="/orcamento#localizacao">Confirmar a minha zona <ArrowUpRight aria-hidden="true" /></Link></div>
         <div className="area-map" role="img" aria-label="Representação ilustrativa da área aproximada em torno de Leiria; não representa uma fronteira exata"><span className="map-ring map-ring-one" /><span className="map-ring map-ring-two" /><span className="map-ring map-ring-three" /><div className="map-center"><MapPin aria-hidden="true" /><strong>Leiria</strong><small>ponto de referência</small></div><p>≈ 30 km</p></div>
       </section>
       <section className="coverage-note"><p><strong>A representação é ilustrativa.</strong> A elegibilidade final depende da morada exata, do artigo, da deslocação necessária e da modalidade do serviço.</p></section>

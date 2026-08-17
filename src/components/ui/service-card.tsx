@@ -10,6 +10,7 @@ export function ServiceCard({ service, index }: { service: Service; index: numbe
         <span className="service-number">{String(index + 1).padStart(2, "0")}</span>
         <Icon aria-hidden="true" />
       </div>
+      {service.priceLabel && <span className="service-price">{service.priceLabel}</span>}
       <h3>{service.title}</h3>
       <p>{service.summary}</p>
       <Link href={`/servicos/${service.slug}`} aria-label={`Conhecer ${service.title.toLowerCase()}`}>
