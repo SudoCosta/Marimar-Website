@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
-import { QuoteWizard } from "@/components/quote/quote-wizard";
-import { serviceIds, type ServiceId } from "@/data/services";
+import { QuoteWizard, QuoteWizardFromSearchParams } from "@/components/quote/quote-wizard";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "Pedir Orçamento Personalizado",
@@ -9,13 +10,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/orcamento" },
 };
 
-export default async function QuotePage({ searchParams }: PageProps<"/orcamento">) {
-  const value = (await searchParams).servico;
-  const requested = typeof value === "string" && serviceIds.includes(value as ServiceId) ? value as ServiceId : undefined;
+export default function QuotePage() {
+  const onlineRequestsAvailable = Boolean(siteConfig.leadsEndpoint);
   return (
     <main id="conteudo" className="quote-page">
-      <div className="quote-header"><Breadcrumbs items={[{ label: "Início", href: "/" }, { label: "Pedir orçamento" }]} /><p className="eyebrow"><span />Orçamento personalizado</p><h1>Conte-nos o que<br /><em>precisa de cuidar.</em></h1><p>Quatro passos curtos. Sem preços automáticos, sem pagamento e sem agendamento antes da confirmação da equipa.</p></div>
-      <QuoteWizard initialService={requested} />
+      <div className="quote-header"><Breadcrumbs items={[{ label: "Início", href: "/" }, { label: "Pedir orçamento" }]} /><p className="eyebrow"><span />Orçamento personalizado</p><h1>Conte-nos o que<br /><em>precisa de cuidar.</em></h1><p>{onlineRequestsAvailable ? "Quatro passos curtos. Sem preços automáticos, sem pagamento e sem agendamento antes da confirmação da equipa." : "A versão informativa já está disponível. O envio online será ativado quando o canal de receção dos pedidos estiver configurado."}</p></div>
+      {onlineRequestsAvailable ? <Suspense fallback={<div className="quote-success"><p>A preparar o formulário…</p></div>}><QuoteWizardFromSearchParams /></Suspense> : <QuoteWizard submissionEndpoint={null} />}
     </main>
   );
 }

@@ -7,6 +7,8 @@ import { Footer } from "@/components/layout/footer";
 import { StructuredData } from "@/components/seo/structured-data";
 import { siteConfig } from "@/config/site";
 
+const basePath = process.env.PAGES_BASE_PATH?.replace(/\/$/, "") || "";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.publicUrl),
   title: { default: "Marimar | Limpeza de Sofás e Estofos em Leiria", template: "%s | Marimar" },
@@ -27,6 +29,7 @@ export const metadata: Metadata = {
     description: "Limpeza especializada de estofos e superfícies têxteis em Leiria e zona envolvente.",
     images: ["/og.png"],
   },
+  icons: { icon: [{ url: `${basePath}/icon.svg`, type: "image/svg+xml" }] },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -1,4 +1,5 @@
 const publicUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000";
+const leadsEndpoint = process.env.NEXT_PUBLIC_LEADS_ENDPOINT?.trim() || null;
 
 export const siteConfig = {
   name: "Marimar",
@@ -6,6 +7,7 @@ export const siteConfig = {
   region: "Leiria",
   approximateRadiusKm: 30,
   publicUrl,
+  leadsEndpoint,
   contacts: {
     phone: process.env.NEXT_PUBLIC_PHONE?.trim() || null,
     email: process.env.NEXT_PUBLIC_EMAIL?.trim() || null,

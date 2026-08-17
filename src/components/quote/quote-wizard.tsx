@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, CircleAlert, LoaderCircle, Minus, Plus } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, CircleAlert, LoaderCircle, Mail, MessageCircle, Minus, Phone, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useFieldArray, useForm, useWatch, type FieldErrors, type Path } from "react-hook-form";
 import { analytics } from "@/lib/analytics";
 import { leadRequestSchema, type LeadRequest } from "@/lib/lead-schema";
-import { getServiceById, services, type ServiceId } from "@/data/services";
+import { getServiceById, serviceIds, services, type ServiceId } from "@/data/services";
+import { siteConfig, telephoneHref, whatsappHref } from "@/config/site";
 
 const steps = ["Artigos", "Detalhes", "Localização", "Contacto e revisão"] as const;
 const materials = ["Não sei", "Tecido", "Microfibra", "Veludo", "Lã", "Fibra sintética", "Mistura de fibras", "Outro"];
@@ -18,8 +20,11 @@ const initialValues: LeadRequest = {
 
 function errorMessages(errors: FieldErrors<LeadRequest>): string[] {
   const output: string[] = [];
+  const visited = new WeakSet<object>();
   const walk = (value: unknown) => {
     if (!value || typeof value !== "object") return;
+    if (visited.has(value)) return;
+    visited.add(value);
     if ("message" in value && typeof value.message === "string") output.push(value.message);
     Object.values(value).forEach(walk);
   };
@@ -35,7 +40,26 @@ function focusErrors() {
   requestAnimationFrame(() => document.getElementById("quote-errors")?.focus());
 }
 
-export function QuoteWizard({ initialService }: { initialService?: ServiceId }) {
+function QuoteUnavailable() {
+  const { contacts } = siteConfig;
+  const hasContacts = contacts.phone || contacts.email || contacts.whatsapp;
+  return (
+    <section className="quote-success quote-unavailable" aria-labelledby="quote-unavailable-title">
+      <CircleAlert aria-hidden="true" />
+      <p className="eyebrow"><span />Pedidos online</p>
+      <h2 id="quote-unavailable-title">O formulário ainda não está ativo neste alojamento.</h2>
+      <p>Esta versão do site não recolhe nem envia dados pessoais. O formulário será ativado quando existir um endpoint externo seguro para receber os pedidos.</p>
+      {hasContacts ? <div className="quote-unavailable-actions">
+        {contacts.phone && <a className="button" href={telephoneHref(contacts.phone)}><Phone aria-hidden="true" />Telefonar</a>}
+        {contacts.email && <a className="button" href={`mailto:${contacts.email}`}><Mail aria-hidden="true" />Enviar email</a>}
+        {contacts.whatsapp && <a className="button" href={whatsappHref(contacts.whatsapp)}><MessageCircle aria-hidden="true" />WhatsApp</a>}
+      </div> : <p className="availability-note">Os contactos diretos também serão publicados assim que forem confirmados pela Marimar.</p>}
+      <Link className="button button-secondary" href="/">Voltar à página inicial <ArrowRight aria-hidden="true" /></Link>
+    </section>
+  );
+}
+
+function InteractiveQuoteWizard({ initialService, submissionEndpoint }: { initialService?: ServiceId; submissionEndpoint: string }) {
   const [step, setStep] = useState(0);
   const [serverError, setServerError] = useState("");
   const [requestId, setRequestId] = useState("");
@@ -87,7 +111,7 @@ export function QuoteWizard({ initialService }: { initialService?: ServiceId }) 
   async function submit(data: LeadRequest) {
     setServerError("");
     try {
-      const response = await fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+      const response = await fetch(submissionEndpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
       const result = (await response.json()) as { id?: string; error?: string };
       if (!response.ok || !result.id) throw new Error(result.error || "Não foi possível enviar o pedido.");
       setRequestId(result.id);
@@ -157,4 +181,16 @@ export function QuoteWizard({ initialService }: { initialService?: ServiceId }) 
       {step === 0 && fields.length > 0 && <button className="clear-items" type="button" onClick={() => { remove(); form.setValue("services", []); }}><Minus aria-hidden="true" />Limpar seleção</button>}
     </form>
   );
+}
+
+export function QuoteWizard({ initialService, submissionEndpoint = siteConfig.leadsEndpoint }: { initialService?: ServiceId; submissionEndpoint?: string | null }) {
+  if (!submissionEndpoint) return <QuoteUnavailable />;
+  return <InteractiveQuoteWizard initialService={initialService} submissionEndpoint={submissionEndpoint} />;
+}
+
+export function QuoteWizardFromSearchParams() {
+  const searchParams = useSearchParams();
+  const value = searchParams.get("servico");
+  const initialService = value && serviceIds.includes(value as ServiceId) ? value as ServiceId : undefined;
+  return <QuoteWizard initialService={initialService} />;
 }

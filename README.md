@@ -2,7 +2,7 @@
 
 Website em português de Portugal para a Marimar, especialista em limpeza, higienização e revitalização de estofos e superfícies têxteis na região de Leiria.
 
-O projeto usa Next.js 16 com App Router, React, TypeScript strict, Tailwind CSS 4 para a base de estilos, React Hook Form, Zod, Resend e Vitest. Não inclui CMS, autenticação, base de dados, pagamentos, cookies não essenciais ou analytics ativos.
+O projeto usa Next.js 16 com App Router, React, TypeScript strict, Tailwind CSS 4 para a base de estilos, React Hook Form, Zod e Vitest. Está configurado como exportação estática para GitHub Pages. Não inclui CMS, autenticação, base de dados, pagamentos, cookies não essenciais ou analytics ativos.
 
 ## Executar localmente
 
@@ -34,11 +34,12 @@ pnpm build
 | `NEXT_PUBLIC_EMAIL` | Não | Email público. O botão é ocultado se estiver vazio. |
 | `NEXT_PUBLIC_WHATSAPP` | Não | Número internacional para `wa.me`. O botão é ocultado se estiver vazio. |
 | `NEXT_PUBLIC_SCHEDULE` | Não | Horário público, apenas depois de confirmado. |
-| `RESEND_API_KEY` | Produção | Chave server-side do Resend. Nunca é exposta ao browser. |
-| `LEADS_TO_EMAIL` | Produção | Caixa que recebe os pedidos validados. |
-| `FROM_EMAIL` | Produção | Remetente verificado no Resend. |
+| `NEXT_PUBLIC_LEADS_ENDPOINT` | Não | Endpoint HTTPS externo para ativar o formulário no GitHub Pages. Deve aceitar POST JSON e devolver `{ "id": "..." }`. |
+| `RESEND_API_KEY` | Backend futuro | Chave server-side do Resend. Nunca pode ser configurada como variável `NEXT_PUBLIC_*` nem exposta no GitHub Pages. |
+| `LEADS_TO_EMAIL` | Backend futuro | Caixa que recebe os pedidos validados. |
+| `FROM_EMAIL` | Backend futuro | Remetente verificado no Resend. |
 
-Em desenvolvimento, a ausência do Resend ativa um adaptador controlado que confirma apenas a referência do pedido e a contagem de categorias no terminal, sem imprimir contactos ou observações. Em produção, a ausência de qualquer uma das três variáveis de email devolve um erro: o frontend nunca simula sucesso.
+Sem `NEXT_PUBLIC_LEADS_ENDPOINT`, o site não apresenta campos pessoais nem simula o envio de pedidos. Mostra um estado informativo e, quando existirem, os contactos diretos confirmados. O GitHub Pages nunca deve receber chaves do Resend: qualquer integração de email tem de viver num backend separado.
 
 ## Comportamento do pedido de orçamento
 
@@ -49,11 +50,11 @@ O fluxo em `/orcamento` tem quatro passos:
 3. Código postal, localidade e preferência de data/período.
 4. Contacto, consentimentos e revisão editável.
 
-O estado permanece em memória enquanto o utilizador avança e recua, mas os dados pessoais não são guardados em `localStorage`, cookies ou analytics. A data é sempre uma preferência; o envio nunca é apresentado como agendamento confirmado.
+Quando o endpoint está configurado, o estado permanece em memória enquanto o utilizador avança e recua, mas os dados pessoais não são guardados em `localStorage`, cookies ou analytics. A data é sempre uma preferência; o envio nunca é apresentado como agendamento confirmado.
 
-`POST /api/leads` aplica validação Zod server-side, limite de 32 KB, honeypot, deduplicação básica durante dois minutos, prevenção de pedidos concorrentes idênticos e escaping do conteúdo enviado por email. A proteção em memória é adequada ao MVP, mas não substitui rate limiting distribuído numa fase com maior volume.
+O browser envia JSON para `NEXT_PUBLIC_LEADS_ENDPOINT` e só mostra sucesso se receber uma resposta válida com um `id`. Esse endpoint externo é responsável por repetir a validação no servidor, limitar o tamanho do pedido, aplicar rate limiting e proteção anti-spam, escapar conteúdo e entregar a mensagem. A validação feita no browser melhora a experiência, mas não é uma fronteira de segurança.
 
-As interfaces `LeadNotifier`, `AvailabilityProvider`, `PricingProvider` e `PhotoStorageProvider` deixam pontos de integração claros sem ativar calendário, preços, fotografias ou armazenamento.
+As interfaces `LeadNotifier`, `AvailabilityProvider`, `PricingProvider` e `PhotoStorageProvider` permanecem como referência para um backend futuro, sem ativar calendário, preços, fotografias ou armazenamento no GitHub Pages.
 
 ## Conteúdo centralizado
 
@@ -91,15 +92,18 @@ Estão implementados metadata por página, canonical, Open Graph, Twitter cards,
 
 O MVP não utiliza cookies não essenciais nem trackers, por isso não apresenta banner de cookies. A interface de analytics é um no-op preparado para eventos não sensíveis; qualquer ativação futura deve ser precedida de uma decisão de privacidade e nunca receber valores do formulário.
 
-## Publicação na Vercel
+## Publicação no GitHub Pages
 
-1. Importar o repositório na Vercel.
-2. Configurar todas as variáveis de produção.
-3. Confirmar que `NEXT_PUBLIC_SITE_URL` usa o domínio HTTPS final.
-4. Verificar o domínio de envio no Resend.
-5. Executar um pedido real e um cenário de falha antes de anunciar o website.
+O workflow `.github/workflows/nextjs.yml` executa automaticamente em cada push para `main`:
 
-Nenhuma publicação foi efetuada por este trabalho.
+1. instala pnpm 11 e Node.js 24;
+2. executa lint, verificação de tipos e testes;
+3. gera a exportação estática em `out/` com o base path do repositório;
+4. publica o artefacto no GitHub Pages.
+
+Em **Settings → Pages**, a origem deve estar definida como **GitHub Actions**. A URL esperada é `https://SudoCosta.github.io/Marimar-Website/`.
+
+Os contactos públicos podem ser configurados em **Settings → Secrets and variables → Actions → Variables** com os nomes `NEXT_PUBLIC_PHONE`, `NEXT_PUBLIC_EMAIL`, `NEXT_PUBLIC_WHATSAPP` e `NEXT_PUBLIC_SCHEDULE`. `NEXT_PUBLIC_LEADS_ENDPOINT` só deve ser preenchido quando existir um backend HTTPS seguro e testado. Nunca adicionar `RESEND_API_KEY` às variáveis públicas.
 
 ## Checklist de lançamento
 
@@ -109,7 +113,8 @@ Nenhuma publicação foi efetuada por este trabalho.
 - [ ] Adicionar fotografias reais e confirmar direitos de utilização.
 - [ ] Confirmar claims comerciais e técnicos.
 - [ ] Configurar domínio e `NEXT_PUBLIC_SITE_URL`.
-- [ ] Configurar Resend, domínio de envio e email de destino.
+- [ ] Configurar e testar um backend externo para os pedidos antes de definir `NEXT_PUBLIC_LEADS_ENDPOINT`.
+- [ ] Configurar Resend, domínio de envio e email de destino apenas nesse backend.
 - [ ] Testar pedidos reais e respostas de erro.
 - [ ] Testar spam e submissões duplicadas.
 - [ ] Testar em iPhone, Android e desktop.
